@@ -9,6 +9,7 @@ public class pauseMenu : MonoBehaviour
     public CanvasGroup pauseMenuCG;
     public CanvasGroup pauseMenuButtons;
     public CanvasGroup fadeOut;
+    public GameObject pauseButtons;
     public playerController player;
     public bool pauseOpen;
     //just so players cant keep on opening and closing the pause menu 1000000 times
@@ -55,6 +56,7 @@ public class pauseMenu : MonoBehaviour
         pauseOpen = true;
         changingPauseStatus = true;
         player.isfrozen = true;
+        pauseButtons.SetActive(true);
         confirm.Play();
         bgm.DOFade(0.5f, 1);
         pauseMenuButtons.DOFade(1, 1);
@@ -68,6 +70,6 @@ public class pauseMenu : MonoBehaviour
         cancel.Play();
         bgm.DOFade(1, 1);
         pauseMenuButtons.DOFade(0, 1);
-        pauseMenuCG.DOFade(0, 1).OnComplete(() => { changingPauseStatus = false; pauseOpen = false; });
+        pauseMenuCG.DOFade(0, 1).OnComplete(() => { changingPauseStatus = false; pauseOpen = false; pauseButtons.SetActive(false); });
     }
 }

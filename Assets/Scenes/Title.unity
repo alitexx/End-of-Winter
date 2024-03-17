@@ -342,10 +342,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 24
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 20
   m_fontStyle: 0
@@ -539,7 +539,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &464575928
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1605,10 +1605,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 17.4
-  m_fontSizeBase: 24
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 15
   m_fontSizeMax: 20
   m_fontStyle: 0
@@ -2220,10 +2220,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 24
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 15
   m_fontSizeMax: 20
   m_fontStyle: 0
@@ -5877,6 +5877,8 @@ MonoBehaviour:
   winScreen: {fileID: 628576678}
   mainmenubuttonWinScreen: {fileID: 1851690905}
   xButton: {fileID: 464575932}
+  xbuttonobj: {fileID: 464575927}
+  mmwsobj: {fileID: 1851690904}
   confirm: {fileID: 462326446}
   cancel: {fileID: 1611427146}
   bgm: {fileID: 1580350420}
@@ -5899,7 +5901,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!225 &1851690905
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -6062,7 +6064,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -43.5}
+  m_AnchoredPosition: {x: 0, y: -60.7}
   m_SizeDelta: {x: 467.61, y: 38.5891}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1957407678

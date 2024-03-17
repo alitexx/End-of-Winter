@@ -77,7 +77,7 @@ using Object = UnityEngine.Object;
         // || _textBox.maxVisibleCharacters >= _textBox.textInfo.characterCount
         if (obj != _textBox || !_readyForNewText)
                 return;
-
+            text.volume = 0.4f;
             CurrentlySkipping = false;
             _readyForNewText = false;
 
@@ -133,19 +133,20 @@ using Object = UnityEngine.Object;
                 return;
 
             CurrentlySkipping = true;
-
+            
             if (!quickSkip || !quickSkipNeeded)
             {
+                
                 text.volume = 0;
                 StartCoroutine(SkipSpeedupReset());
                 return;
             }
 
             StopCoroutine(_typewriterCoroutine);
+            
             _textBox.maxVisibleCharacters = _textBox.textInfo.characterCount;
             _readyForNewText = true;
             CompleteTextRevealed?.Invoke();
-            text.volume = 0.5f;
     }
 
         private IEnumerator SkipSpeedupReset()

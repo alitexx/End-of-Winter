@@ -19,6 +19,7 @@ public class playerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        isfrozen = true;
     }
 
     private void Awake()
