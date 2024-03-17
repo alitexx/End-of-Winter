@@ -9,6 +9,7 @@ public class pauseMenu : MonoBehaviour
     public CanvasGroup pauseMenuCG;
     public CanvasGroup fadeOut;
     public playerController player;
+    public bool pauseOpen;
     //just so players cant keep on opening and closing the pause menu 1000000 times
     private bool changingPauseStatus = false;
     //add something for music
@@ -45,6 +46,7 @@ public class pauseMenu : MonoBehaviour
 
     public void openPause()
     {
+        pauseOpen = true;
         changingPauseStatus = true;
         player.isfrozen = true;
         pauseMenuCG.DOFade(1, 1).OnComplete(() => { changingPauseStatus = false;});
@@ -54,6 +56,6 @@ public class pauseMenu : MonoBehaviour
     {
         changingPauseStatus = true;
         player.isfrozen = false;
-        pauseMenuCG.DOFade(0, 1).OnComplete(() => { changingPauseStatus = false; });
+        pauseMenuCG.DOFade(0, 1).OnComplete(() => { changingPauseStatus = false; pauseOpen = false; });
     }
 }
