@@ -7,7 +7,8 @@ public class playerController : MonoBehaviour
     public float movementSpeed = 5f;
     public Rigidbody2D rb;
     public bool isfrozen; // freeze the player when pausing or when interracting with a house
-
+    [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField] private Sprite[] idleSprites;
     private Vector2 input;
 
     private Animator animator;
@@ -44,6 +45,7 @@ public class playerController : MonoBehaviour
             animator.SetFloat("moveX", input.x);
             animator.SetFloat("moveY", input.y);
             animator.SetFloat("speed", input.sqrMagnitude);
+
         }
     }
 
@@ -51,10 +53,6 @@ public class playerController : MonoBehaviour
     {
         rb.MovePosition(rb.position + input * movementSpeed * Time.fixedDeltaTime);
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        }
 
 
 

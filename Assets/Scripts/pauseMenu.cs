@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class pauseMenu : MonoBehaviour
 {
     public CanvasGroup pauseMenuCG;
+    public CanvasGroup pauseMenuButtons;
     public CanvasGroup fadeOut;
     public playerController player;
     public bool pauseOpen;
@@ -22,7 +23,7 @@ public class pauseMenu : MonoBehaviour
         confirm.Play();
         bgm.DOFade(0, 1);
         changingPauseStatus = false;
-        fadeOut.DOFade(1, 2).OnComplete(() => { SceneManager.LoadScene("Title"); });
+        fadeOut.DOFade(1, 1).OnComplete(() => { SceneManager.LoadScene("Title"); });
     }
 
     public void quitGame()
@@ -32,12 +33,12 @@ public class pauseMenu : MonoBehaviour
         confirm.Play();
         bgm.DOFade(0, 1);
         changingPauseStatus = false;
-        fadeOut.DOFade(1, 2).OnComplete(() => { Application.Quit(); });
+        fadeOut.DOFade(1, 1).OnComplete(() => { Application.Quit(); });
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !dialogue.isTalking)
         {
             if (changingPauseStatus != true && pauseMenuCG.alpha == 0)
             {
@@ -56,6 +57,7 @@ public class pauseMenu : MonoBehaviour
         player.isfrozen = true;
         confirm.Play();
         bgm.DOFade(0.5f, 1);
+        pauseMenuButtons.DOFade(1, 1);
         pauseMenuCG.DOFade(1, 1).OnComplete(() => { changingPauseStatus = false;});
     }
 
@@ -65,6 +67,7 @@ public class pauseMenu : MonoBehaviour
         player.isfrozen = false;
         cancel.Play();
         bgm.DOFade(1, 1);
+        pauseMenuButtons.DOFade(0, 1);
         pauseMenuCG.DOFade(0, 1).OnComplete(() => { changingPauseStatus = false; pauseOpen = false; });
     }
 }

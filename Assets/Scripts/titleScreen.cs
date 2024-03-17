@@ -8,6 +8,8 @@ public class titleScreen : MonoBehaviour
 {
     public CanvasGroup credits;
     public CanvasGroup fadeOut;
+    public CanvasGroup winScreen;
+    public CanvasGroup mainmenubuttonWinScreen;
     public CanvasGroup xButton;
     [SerializeField] private AudioSource confirm;
     [SerializeField] private AudioSource cancel;
@@ -17,7 +19,25 @@ public class titleScreen : MonoBehaviour
     private void Start()
     {
         fadeOut.DOFade(0, 1);
+        xButton.enabled = false;
+        if (winCondition.flowersGiven >= 5)
+        {
+            //display you win stuff
+            mainmenubuttonWinScreen.enabled = false;
+            mainmenubuttonWinScreen.DOFade(1, 0.25f);
+            winScreen.DOFade(1, 0.25f);
+        }
+        winCondition.flowersGiven = 0;
     }
+
+    public void closeWinScreen()
+    {
+        // Tween in black screen
+        confirm.Play();
+        mainmenubuttonWinScreen.DOFade(0, 1).OnComplete(() => { mainmenubuttonWinScreen.enabled = false; });
+        winScreen.DOFade(0, 1);
+    }
+
     public void startGame()
     {
         // Tween in black screen
@@ -36,6 +56,7 @@ public class titleScreen : MonoBehaviour
     public void openCredits()
     {
         confirm.Play();
+        xButton.enabled = true;
         xButton.DOFade(1, 1);
         credits.DOFade(1, 1);
         //tween in credits
@@ -44,8 +65,7 @@ public class titleScreen : MonoBehaviour
     public void closeCredits()
     {
         cancel.Play();
-        xButton.DOFade(0, 1);
+        xButton.DOFade(0, 1).OnComplete(() => { xButton.enabled = false; });
         credits.DOFade(0, 1);
-        //tween out credits
     }
 }

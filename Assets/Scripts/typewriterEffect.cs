@@ -20,10 +20,11 @@ using Object = UnityEngine.Object;
         [Header("Typewriter Settings")]
         [SerializeField] private float charactersPerSecond = 20;
         [SerializeField] private float interpunctuationDelay = 0.5f;
+        [SerializeField] private AudioSource text;
 
 
-        // Skipping Functionality
-        public bool CurrentlySkipping { get; private set; }
+    // Skipping Functionality
+    public bool CurrentlySkipping { get; private set; }
         private WaitForSeconds _skipDelay;
 
         [Header("Skip options")]
@@ -101,7 +102,6 @@ using Object = UnityEngine.Object;
                 {
                     _textBox.maxVisibleCharacters++;
                     yield return _textboxFullEventDelay;
-                    Debug.Log("Sent event!");
                     CompleteTextRevealed?.Invoke();
                     _readyForNewText = true;
                     yield break;
@@ -121,7 +121,7 @@ using Object = UnityEngine.Object;
                 {
                     yield return CurrentlySkipping ? _skipDelay : _simpleDelay;
                 }
-
+                text.Play(); // come back here if this is annoying
                 CharacterRevealed?.Invoke(character);
                 _currentVisibleCharacterIndex++;
             }
@@ -136,6 +136,7 @@ using Object = UnityEngine.Object;
 
             if (!quickSkip || !quickSkipNeeded)
             {
+                text.volume = 0;
                 StartCoroutine(SkipSpeedupReset());
                 return;
             }
@@ -143,9 +144,9 @@ using Object = UnityEngine.Object;
             StopCoroutine(_typewriterCoroutine);
             _textBox.maxVisibleCharacters = _textBox.textInfo.characterCount;
             _readyForNewText = true;
-            Debug.Log("Sent event!");
             CompleteTextRevealed?.Invoke();
-        }
+            text.volume = 0.5f;
+    }
 
         private IEnumerator SkipSpeedupReset()
         {

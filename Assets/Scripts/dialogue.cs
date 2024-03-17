@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
 public class dialogue : MonoBehaviour
 {
+    public static bool isTalking = false;
     public RectTransform dialoguebox;
     public RectTransform dialoguetexttransform;
     public typewriterEffect typewriter;
@@ -28,7 +29,12 @@ public class dialogue : MonoBehaviour
     public Sprite otherTurned;
     [SerializeField] private AudioSource CloseDoor;
     [SerializeField] private AudioSource ObtainPresent;
+    [SerializeField] private AudioSource bgm;
     [SerializeField] private CanvasGroup fadeOut;
+    [SerializeField] private CanvasGroup housesLeft;
+    [SerializeField] private TextMeshProUGUI housesLeftText;
+    [SerializeField] private Animator playeranim;
+    [SerializeField] private Sprite[] giftOptions;
 
     // Start is called before the first frame update
     void Start()
@@ -55,27 +61,43 @@ public class dialogue : MonoBehaviour
                 other.sprite = otherTurned;
                 other.DOFade(0, 1);
 
-                dialogueSpoken = new string[1];
+                dialogueSpoken = new string[9];
                 isTextDone = false;
                 currentDialoguePlacement = 0;
                 typewriter.enabled = false;
-                closeDialogue();
+                closeDialogue(false);
                 player.isfrozen = false;
-
+                currentDialoguePlacement = 0;
+                CloseDoor.Play();
+                playeranim.enabled = true;
+                isTalking = false;
+                housesLeft.DOFade(1, 1);
                 return;
             }
             if (currentDialoguePlacement > dialogueSpoken.Length || dialogueSpoken[currentDialoguePlacement] == "END")
             {
-                dialogueSpoken = new string[1];
+                dialogueSpoken = new string[9];
                 isTextDone = false;
                 currentDialoguePlacement = 0;
                 typewriter.enabled = false;
                 closeDialogue();
+                currentDialoguePlacement = 0;
+                CloseDoor.Play();
                 winCondition.flowersGiven++;
+                housesLeftText.text = $"Houses Left: {winCondition.flowersGiven}";
                 if (winCondition.flowersGiven >= 5)
                 {
                     //send to another scene
+                    headPresent.SetActive(false);
+                    bgm.DOFade(0, 1);
+                    fadeOut.DOFade(1, 2).OnComplete(() => { SceneManager.LoadScene("Title"); });
                 }
+                else
+                {
+                    ObtainPresent.Play();
+                    headPresent.GetComponent<SpriteRenderer>().sprite = giftOptions[UnityEngine.Random.Range(0, 9)];
+                }
+                isTalking = false;
                 return;
             }
 
@@ -84,6 +106,7 @@ public class dialogue : MonoBehaviour
                 //enable present on the head
                 headPresent.SetActive(true);
                 //sfx
+                ObtainPresent.Play();
             }
 
             dialoguetext.text = dialogueSpoken[currentDialoguePlacement];
@@ -93,6 +116,7 @@ public class dialogue : MonoBehaviour
 
     public void runDialogue(GameObject originalLocation)
     {
+        isTalking = true;
         originalLoc = originalLocation;
         dialoguebox.DOMove(pos.transform.position, 0.25f, true);
         dialoguebox.DOSizeDelta(dialoguesize, 0.5f, true);
@@ -100,12 +124,12 @@ public class dialogue : MonoBehaviour
         if (originalLocation == openingCutscene)
         {
             dialogueSpoken[0] = "Do you even listen? I bet you don't know that you need to press Space to make the story progress, now did you?";
-            dialogueSpoken[1] = "Alright, this is the last time I tell you. You're helping out the community now! Think of it as turning over a new leaf.";
-            dialogueSpoken[2] = "That means that you have to be nice to people now. Sorry.";
+            dialogueSpoken[1] = "Alright, this is the last time I'll tell you. You're helping out the community now! Think of it as turning over a new leaf.";
+            dialogueSpoken[2] = "That means that you have to be nice to people now! You can't be a lazybones, put a smile on that face!";
             dialogueSpoken[3] = "And it all starts with one easy step... like giving your neighbors flowers!";
-            dialogueSpoken[4] = "Here, take this. I even packaged it up for you! It shouldn't be hard.";
+            dialogueSpoken[4] = "Here, take this. I even packaged it up for you! It shouldn't be hard, just go to the houses with green doors and pass them out. There should be five.";
             dialogueSpoken[5] = "Social anxiety or not, you just gotta knock on their door a few times and hand 'em out. I believe in you!";
-            dialogueSpoken[6] = "Try the house right next to here, I'm sure they'd appreciate it. Remember, you only need to hand them out to houses with green doors!";
+            dialogueSpoken[6] = "Try the house right next to here, I'm sure they'd appreciate it. Remember, you only need to hand them out to houses with green doors, they all look similar!";
             dialogueSpoken[7] = "Oh! And if you forgot, you gotta move your legs with W, A, S and D. Or you can press escape to take a breather!";
             dialogueSpoken[8] = "END";
             typewriter.enabled = true;
@@ -113,7 +137,7 @@ public class dialogue : MonoBehaviour
             currentDialoguePlacement++;
         } else
         {
-            findLines((UnityEngine.Random.Range(1, 10)));
+            findLines((UnityEngine.Random.Range(1, 15)));
         }
     }
 
@@ -123,7 +147,7 @@ public class dialogue : MonoBehaviour
         {
             if (alreadyUsedDialogue[i] == random)
             {
-                findLines((UnityEngine.Random.Range(1, 10)));
+                findLines((UnityEngine.Random.Range(1, 15)));
             }
         }
 
@@ -186,7 +210,7 @@ public class dialogue : MonoBehaviour
                 dialogueSpoken[0] = "Hello! Oh, you're selling flowers? They look so pretty! How much?";
                 dialogueSpoken[1] = "You're giving them away?! Oh, how kind of you! What a good samaritan.";
                 dialogueSpoken[2] = "Thank you so much, I'll be sure to repay you soon. Do you have any allergies? I was planing on making banana walnut bread tonight, and I'd be happy to share!";
-                dialogueSpoken[3] = "We can figure something out. Thanks again!";
+                dialogueSpoken[3] = "Thanks again!";
                 dialogueSpoken[4] = "END";
                 break;
             case 9:
@@ -216,14 +240,14 @@ public class dialogue : MonoBehaviour
                 dialogueSpoken[4] = "END";
                 break;
             case 13:
-                dialogueSpoken[0] = "Winter is almost over... thank god. I hate having to scrape the snow off of my nonexistent car.";
+                dialogueSpoken[0] = "Winter is almost over... thank goodness. I hate having to scrape the snow off of my nonexistent car.";
                 dialogueSpoken[1] = "Oh, flowers? Well look at that, spring is already here! Thanks.";
                 dialogueSpoken[2] = "END";
                 break;
             case 14:
                 dialogueSpoken[0] = "Flowers? Oh, thank you so much!";
                 dialogueSpoken[1] = "This is perfect... this time of season is always so dreary and miserable.";
-                dialogueSpoken[2] = "Flowers make it a little better, though. It takes one kind gesture to make someone's day, and you've definitely made mine. Thanks again.";
+                dialogueSpoken[2] = "Flowers make it a little better. It takes one kind gesture to make someone's day, and you've definitely made mine. Thanks again.";
                 dialogueSpoken[3] = "END";
                 break;
             case 15:
@@ -241,11 +265,14 @@ public class dialogue : MonoBehaviour
         
 
 
-    public void closeDialogue()
+    public void closeDialogue(bool isCutscene = true)
     {
         dialoguebox.DOMove(initpos.transform.position, 0.25f, true);
         dialoguebox.DOSizeDelta(new Vector2(25, 15), 0.5f, true);
         dialoguetexttransform.DOSizeDelta(new Vector2(22, 13.5f), 0.5f, true);
-        originalLoc.GetComponent<triggerEvent>().finishUpDoor();
+        if (isCutscene)
+        {
+            originalLoc.GetComponent<triggerEvent>().finishUpDoor();
+        }
     }
 }
