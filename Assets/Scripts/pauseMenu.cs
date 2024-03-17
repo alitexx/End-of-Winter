@@ -12,12 +12,15 @@ public class pauseMenu : MonoBehaviour
     public bool pauseOpen;
     //just so players cant keep on opening and closing the pause menu 1000000 times
     private bool changingPauseStatus = false;
+    [SerializeField] private AudioSource confirm;
+    [SerializeField] private AudioSource cancel;
+    [SerializeField] private AudioSource bgm;
     //add something for music
 
     public void title()
     {
-        // Tween in black screen
-        //tween out music
+        confirm.Play();
+        bgm.DOFade(0, 1);
         changingPauseStatus = false;
         fadeOut.DOFade(1, 2).OnComplete(() => { SceneManager.LoadScene("Title"); });
     }
@@ -26,6 +29,8 @@ public class pauseMenu : MonoBehaviour
     {
         // Tween in black screen
         //tween out music
+        confirm.Play();
+        bgm.DOFade(0, 1);
         changingPauseStatus = false;
         fadeOut.DOFade(1, 2).OnComplete(() => { Application.Quit(); });
     }
@@ -49,6 +54,8 @@ public class pauseMenu : MonoBehaviour
         pauseOpen = true;
         changingPauseStatus = true;
         player.isfrozen = true;
+        confirm.Play();
+        bgm.DOFade(0.5f, 1);
         pauseMenuCG.DOFade(1, 1).OnComplete(() => { changingPauseStatus = false;});
     }
 
@@ -56,6 +63,8 @@ public class pauseMenu : MonoBehaviour
     {
         changingPauseStatus = true;
         player.isfrozen = false;
+        cancel.Play();
+        bgm.DOFade(1, 1);
         pauseMenuCG.DOFade(0, 1).OnComplete(() => { changingPauseStatus = false; pauseOpen = false; });
     }
 }
