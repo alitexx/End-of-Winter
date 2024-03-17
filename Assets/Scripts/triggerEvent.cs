@@ -11,6 +11,7 @@ public class triggerEvent : MonoBehaviour
     [SerializeField] private pauseMenu pauseScript;
     public playerController player;
     [SerializeField] private Animator door;
+    [SerializeField] private GameObject RangeChecker;
     private int knocksDone;
     public bool knockRange;
     private bool doorComplete;
@@ -19,17 +20,15 @@ public class triggerEvent : MonoBehaviour
     {
         if(knockRange && Input.GetKeyDown(KeyCode.Space) && !doorComplete && !pauseScript.pauseOpen)
         {
-            Debug.Log("PRESSED!!");
             knock.Play();
             knocksDone++;
             if (knocksDone >= knocksNeeded)
             {
                 doorComplete = true;
-                //open door
                 door.enabled = true;
                 spaceBarIcon.SetActive(false);
                 player.isfrozen = true;
-                dialoguemanagement.runDialogue();
+                dialoguemanagement.runDialogue(gameObject);
             }
         }
     }
@@ -43,5 +42,13 @@ public class triggerEvent : MonoBehaviour
             spaceBarIcon.SetActive(true);
             knockRange = true;
         }
+    }
+
+    public void finishUpDoor()
+    {
+        door.SetBool("talkingComplete", true);
+        player.isfrozen = false;
+        RangeChecker.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
